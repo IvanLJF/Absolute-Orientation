@@ -1,15 +1,15 @@
-function drw = getOmegaDiff(w2, p2, k2)
+function drw = getOmegaDiff(w, p, k)
 	%returns the matrix of differentials R w.r.t angle omega :
 	
 	% replacement elements elements used for shorter code:
 
-	a1 = cos(w2);
-	a2 = cos(p2);
-	a3 = cos(k2);  %cosines of rotational
+	a1 = cos(w);
+	a2 = cos(p);
+	a3 = cos(k);  %cosines of rotational
 
-	b1 = sin(w2);
-	b2 = sin(p2);
-	b3 = sin(k2);  %sines of rotational
+	b1 = sin(w);
+	b2 = sin(p);
+	b3 = sin(k);  %sines of rotational
 
 	drw(1,1) = 0;
 	drw(1,2) = -b1*b3 + a1*b2*a3;
