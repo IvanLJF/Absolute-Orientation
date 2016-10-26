@@ -113,9 +113,9 @@ n = length(N); %  = len(E) = len(Z)
 
 %first iteration values
 
-A = getA(IP, x, y, z, E, N, H, R, drw, drp, drk, lm, n);
+A = getA(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, lm, n);
 
-L = getL(IP, x, y, z, E, N, H, R, drw, drp, drk, lm, n);
+% L = getL(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, lm, n);
 
 dx = getdx(A,L)
 
