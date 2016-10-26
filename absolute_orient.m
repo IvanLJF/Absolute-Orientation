@@ -2,7 +2,27 @@ clc
 
 format long
 % DATA MATRIX
-%model coordinates
+
+%control model point coordinates
+xc = [
+  210.47
+  219.92
+  594.13
+]
+
+yc = [
+  896.96
+  507.34
+  243.06
+]
+
+zc = [
+  174.54
+  195.46
+  206.49
+]
+
+%model coordinates for all the six
 x= [
   210.47
   219.92
@@ -57,9 +77,9 @@ YO = 0;
 ZO = 0;
 
 %assumed values of the rotations of the model in x, y, and z axis relative to the ground
-w = 0;  % delta omega 2 dw2
-p = 0;  % delta phi 2   dp2
-k = 0 ; % delta kappa 2 dk2
+w = 0;  % delta omega 2 dw
+p = 0;  % delta phi 2   dp
+k = 0 ; % delta kappa 2 dk
 
 %scale factor: lambda lm
 lm = 1;
@@ -81,21 +101,21 @@ R = getR(w, p, k);
 
 %differentials of rotational elements
 
-drw = getOmegaDiff(w2, p2, k2);
+drw = getOmegaDiff(w, p, k);
 
-drp = getPhiDiff(w2, p2, k2);
+drp = getPhiDiff(w, p, k);
 
-drk = getKappaDiff(w2, p2, k2);
+drk = getKappaDiff(w, p, k);
 
 %number of data points n :
-n = length(x1); %  = len(y1) =len(XI) = len(YI) =len(ZI)!
+n = length(N); %  = len(E) = len(Z)
 
 
 %first iteration values
 
-A = getA(x, y, z, E, N, H, R, drw, drp, drk, lm);
+A = getA(IP, x, y, z, E, N, H, R, drw, drp, drk, lm, n);
 
-L = getL(x, y, z, E, N, H, R, drw, drp, drk, lm);
+L = getL(IP, x, y, z, E, N, H, R, drw, drp, drk, lm, n);
 
 dx = getdx(A,L)
 
@@ -115,9 +135,9 @@ deviations = sqrt(variances)
 % while (dx - getdx(A,L) ~= zeros(length(dx),1))
 % for i = 1:10
 % 	% change in unknowns BY, BZ, Omega(w), Phi(p) and Kappa(k) respectively are:
-% 	cw2 = dx(1:1);
-% 	cp2 = dx(2:1);
-% 	ck2 = dx(3:1);
+% 	cw = dx(1:1);
+% 	cp = dx(2:1);
+% 	ck = dx(3:1);
 
 % 	cBY = dx(4:1);
 % 	cBZ = dx(5:1);
@@ -139,9 +159,9 @@ deviations = sqrt(variances)
 % 	%modified values:  effecting the changes:: value + change in value.
 
 % 	%rotationals
-% 	w2 = w2 + cw2
-% 	p2 = p2 + cp2
-% 	k2 = k2 + ck2
+% 	w = w + cw
+% 	p = p + cp
+% 	k = k + ck
 
 % 	% base components
 % 	BY = BY + cBY
@@ -153,12 +173,12 @@ deviations = sqrt(variances)
 % 	ZI = ZI + cZI;
 
 %   %rotational matrix R
-%   R = getR(w2, p2, k2)
+%   R = getR(w, p, k)
 
 %   %differential
-% 	drw = getOmegaDiff(w2, p2, k2)
-% 	drp = getPhiDiff(w2, p2, k2)
-% 	drk = getKappaDiff(w2, p2, k2)
+% 	drw = getOmegaDiff(w, p, k)
+% 	drp = getPhiDiff(w, p, k)
+% 	drk = getKappaDiff(w, p, k)
 
 % 	A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
 
