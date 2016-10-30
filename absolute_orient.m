@@ -1,6 +1,6 @@
 clc
 
-format long
+format short
 % DATA MATRIX
 
 %control model point coordinates
@@ -8,19 +8,19 @@ xc = [
   210.47
   219.92
   594.13
-]
+];
 
 yc = [
   896.96
   507.34
   243.06
-]
+];
 
 zc = [
   174.54
   195.46
   206.49
-]
+];
 
 %model coordinates for all the six
 x= [
@@ -63,40 +63,20 @@ E = [
   670745.89
 ];
 
-Z = [
+H = [
   1243.65
   1259.22
   1267.65
 ];
 
-  %%% initial parameters are then estimated as:
-
-%assumed coordinates of the origin of the model coordinate system
-XO = 0;
-YO = 0;
-ZO = 0;
-
-%assumed values of the rotations of the model in x, y, and z axis relative to the ground
-w = 0;  % delta omega 2 dw
-p = 0;  % delta phi 2   dp
-k = 0 ; % delta kappa 2 dk
-
-%scale factor: lambda lm
-lm = 1;
-
-
 %matrix of initial parameters IP
-IP = [
-	XO
-	YO
-	ZO
-	w
-  p
-  k
-  lm	
-];
+IP = getIP(xc, yc, zc);
 
-%rotational matrix R
+w = IP(4,1);
+p = IP(5,1);
+k = IP(6,1);
+
+%rotational matrix Rs
 R = getR(w, p, k);
 
 %differentials of rotational elements
@@ -108,28 +88,30 @@ drp = getPhiDiff(w, p, k);
 drk = getKappaDiff(w, p, k);
 
 %number of data points n :
-n = length(N); %  = len(E) = len(Z)
+r = length(N); %  = len(E) = len(H)
 
 
 %first iteration values
 
-A = getA(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, lm, n);
+A = getA(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r)
 
-% L = getL(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, lm, n);
+L = getL(IP, xc, yc, zc, E, N, H, R, r)
 
-dx = getdx(A,L)
+% dx = getdx(A,L);
 
 
-% residual matrix v
-v = - L - (A * dx);
+% % residual matrix v
+% v = - L - (A * dx);
 
-sigma = sqrt(v' * v );
+% sigma = sqrt(v' * v );
 
-exx = sigma * inv(A' * A);
+% exx = sigma * inv(A' * A);
 
-variances = diag(exx);
+% variances = diag(exx);
 
-deviations = sqrt(variances)
+% deviations = sqrt(variances);
+
+%%%%-------------------------------------%%%
 
 % subsequent iteration to convergence
 % while (dx - getdx(A,L) ~= zeros(length(dx),1))
