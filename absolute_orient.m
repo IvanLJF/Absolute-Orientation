@@ -97,7 +97,7 @@ A = getA(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r)
 
 L = getL(IP, xc, yc, zc, E, N, H, R, r)
 
-% dx = getdx(A,L);
+dx = getdx(A,L)
 
 
 % % residual matrix v
