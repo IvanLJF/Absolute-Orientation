@@ -4,9 +4,9 @@ function L = getL(IP, xc, yc, zc, E, N, H, R, r)
 	%scale factor, lambda, lm
 	lm = IP(1,1);
 	%shifts in X, Y, Z respectively
-	e = IP(2,1);
-	n = IP(3,1);
-	h = IP(4,1);
+	e = IP(5,1);
+	n = IP(6,1);
+	h = IP(7,1);
 
 	% compute the L matrix 
 	L = zeros(r*3,1);

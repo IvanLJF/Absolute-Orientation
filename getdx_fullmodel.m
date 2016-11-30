@@ -1,10 +1,10 @@
-function dx = getdx(A,L)
+function fdx = getdx_fullmodel(FA,FL)
 	%get the matrix of the unknowns PARAMETERS
 
-	qxx = inv( A' * A );
+	qxx = inv( FA' * FA );
 
 	% The error matrix dl
-	dl = A' * L;   
+	dl = FA' * FL;   
     
     %the -L applied results in the formation of the least square solution 
 	
@@ -12,6 +12,6 @@ function dx = getdx(A,L)
 		%% dw2, dp2, dk2, dBY, dBZ, dXi, dYi, dZi
 		  %% these unknowns in the matrix dx are computed as change values
 
-  dx = qxx * dl;
+  fdx = qxx * dl;
   
 end

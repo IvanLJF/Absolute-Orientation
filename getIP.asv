@@ -22,25 +22,19 @@ function IP = getIP(xc, yc, zc, N, E, H)
  
   function lm = getScale()
     %distances
-    model_dist = sqrt( diff_x^2 + diff_y^2 ); %in M
+    model_dist = sqrt( diff_x^2 + diff_y^2 )/1000 %in mm
     
-    ground_dist = sqrt( diff_E^2 + diff_N^2 ); %in M
+    ground_dist = sqrt( diff_E^2 + diff_N^2 ) %in M
     
     %scale factor lm:
-    lm = ground_dist / (model_dist) 
+    lm = ground_dist / (model_dist/1000);
   end
 
   function k = getKappa()
     %bearings
-    model_brg = atan(diff_x / diff_y);
-    ground_brg = atan(diff_E / diff_N);
 
-    k = ground_brg - model_brg
-    % kappa k degrees
-    kdeg = radtodeg(ground_brg - model_brg) %in degrees
-    
-    %some test conversions
     % first = radtodeg(atan(diff_x / diff_y));
+    model_brg = atan(diff_x / diff_y);
 
     % if first < 0
     %   % first + 180;
@@ -49,7 +43,11 @@ function IP = getIP(xc, yc, zc, N, E, H)
     %   model_brg = atan(diff_x / diff_y)
     % end      
 
+    ground_brg = atan(diff_E / diff_N);
 
+    % kappa k radians
+    k = ground_brg - model_brg;
+    % k = radtodeg(ground_brg - model_brg); in degrees
   end
 
   function enh = getShifts(a, b)
@@ -58,9 +56,9 @@ function IP = getIP(xc, yc, zc, N, E, H)
     lm = getScale();  %get the scale  factor
 
     % scale the model coords
-    sxc = xc * lm;
-    syc = yc * lm;
-    szc = zc * lm;
+    sxc = (xc / 1000) * lm;
+    syc = (yc / 1000) * lm;
+    szc = (zc / 1000) * lm;
 
     % the three shifts for point a
     e = E(a) - sxc(a);
@@ -71,7 +69,7 @@ function IP = getIP(xc, yc, zc, N, E, H)
       e
       n
       h
-    ]
+    ];
   end
 
   lm = getScale();
@@ -84,12 +82,12 @@ function IP = getIP(xc, yc, zc, N, E, H)
  
   IP = [
     lm
-    w
-    p
-    k
     e
     n
     h
+    w
+    p
+    k
   ];
 
   % CHECKS %

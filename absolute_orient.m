@@ -1,28 +1,29 @@
 clc
 
+%format long
 format short
 % DATA MATRIX
 
-%control model point coordinates
+%control model point coordinates in m,
 xc = [
   210.47
   219.92
   594.13
-];
+] / 1000;
 
 yc = [
-  896.96
+  896.96 
   507.34
   243.06
-];
+] / 1000;
 
 zc = [
   174.54
   195.46
   206.49
-];
+] / 1000;
 
-%model coordinates for all the six
+%model coordinates for all the six points in mm
 x= [
   210.47
   219.92
@@ -30,7 +31,7 @@ x= [
   578.42
   587.52
   594.13
-];
+] / 1000;
 
 y=[
   896.96
@@ -39,7 +40,7 @@ y=[
   849.63
   546.88
   243.06
-];
+] / 1000;
 
 z=[
   174.54
@@ -48,9 +49,9 @@ z=[
   174.46
   188.91
   206.49
-];
+] / 1000;
 
-%Ground point xoordinates: the GCPs
+%Ground point xoordinates: the GCPs in m
 N = [
   223343.72
   223345.03
@@ -70,11 +71,12 @@ H = [
 ];
 
 %matrix of initial parameters IP
-IP = getIP(xc, yc, zc);
+IP = getIP(xc, yc, zc, N, E, H)
 
-w = IP(4,1);
-p = IP(5,1);
-k = IP(6,1);
+w = IP(2,1);
+p = IP(3,1);
+k = IP(4,1);
+
 
 %rotational matrix Rs
 R = getR(w, p, k);
@@ -88,16 +90,17 @@ drp = getPhiDiff(w, p, k);
 drk = getKappaDiff(w, p, k);
 
 %number of data points n :
-r = length(N); %  = len(E) = len(H)
+r = length(N); %  = len(E) = len(H) :: number of control points
+r2 = length(x); % number of all the data points
 
 
 %first iteration values
 
-A = getA(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r)
+A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r);
 
-L = getL(IP, xc, yc, zc, E, N, H, R, r)
+L = getL(IP, xc, yc, zc, E, N, H, R, r);
 
-dx = getdx(A,L)
+dx = getdx(A,L);
 
 
 % % residual matrix v
@@ -112,60 +115,39 @@ dx = getdx(A,L)
 % deviations = sqrt(variances);
 
 %%%%-------------------------------------%%%
+iterations = 1;
+for m = 1: iterations
+  % all shifts above equal to
+  IP = IP+dx;
 
-% subsequent iteration to convergence
-% while (dx - getdx(A,L) ~= zeros(length(dx),1))
-% for i = 1:10
-% 	% change in unknowns BY, BZ, Omega(w), Phi(p) and Kappa(k) respectively are:
-% 	cw = dx(1:1);
-% 	cp = dx(2:1);
-% 	ck = dx(3:1);
+  w = IP(2,1);
+  p = IP(3,1);
+  k = IP(4,1);
 
-% 	cBY = dx(4:1);
-% 	cBZ = dx(5:1);
+  R = getR(w, p, k); %get a new rotational
 
-% 	% changes in the model coordinates
-  
-%   cXI;  cYI;  cZI;
+  drw = getOmegaDiff(w, p, k);
 
-% 	p = 6;
-% 	for m = 1: 6
+  drp = getPhiDiff(w, p, k);
 
-% 		cXI(m,1) = dx(p,1);
-% 		cYI(m,1) = dx(p+1,1);
-% 	  cZI(m,1) = dx(p+2,1);
+  drk = getKappaDiff(w, p, k);
 
-% 	  p = p + 3;
-% 	end
+  A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r)
 
-% 	%modified values:  effecting the changes:: value + change in value.
+  L = getL(IP, xc, yc, zc, E, N, H, R, r)
 
-% 	%rotationals
-% 	w = w + cw
-% 	p = p + cp
-% 	k = k + ck
+  dx = getdx(A,L)
 
-% 	% base components
-% 	BY = BY + cBY
-% 	BZ = BZ + cBZ
+  if m == iterations
+    ENH = getCoords(x, y, z, IP, R, r2)
+  end
 
-% 	% model coordinates
-% 	XI = XI + cXI;
-% 	YI = YI + cYI;
-% 	ZI = ZI + cZI;
+end
 
-%   %rotational matrix R
-%   R = getR(w, p, k)
-
-%   %differential
-% 	drw = getOmegaDiff(w, p, k)
-% 	drp = getPhiDiff(w, p, k)
-% 	drk = getKappaDiff(w, p, k)
-
-% 	A = getA(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, drw, drp, drk, f, n);
-
-% 	L = getL(x1, y1, x2, y2, BX, BY, BZ, XI, YI, ZI, R, f, n);
-
-% 	dx = getdx(A,L)
-
+% fdx = zeros()
+% compute the values for the whole model iterating 10 times
+% for m = 1:10
+%   FA = getA_fullmodel(IP, x, y, z, E, N, H, R, drw, drp, drk, r2);
+%   FL = getL_fullmodel(IP, x, y, z, E, N, H, R, r2);
+%   fdx = getdx_fullmodel(FA, FL)
 % end
