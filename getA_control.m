@@ -2,14 +2,8 @@ function A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r)
   % returns the A matrix using the three control points
 
   % from the initial parameter matrix IP::
-
   %scale factor, lambda, lm
   lm = IP(1,1);
-
-  % %shifts in X, Y, Z respectively
-  % e = IP(2,1)
-  % n = IP(3,1)
-  % h = IP(4,1)
   
   A = zeros(r*3, 7);
   

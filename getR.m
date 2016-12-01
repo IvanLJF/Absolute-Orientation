@@ -5,7 +5,7 @@ function R = getR(w, p, k)
 	R(1,3) = sin(w)*sin(k) - cos(w)*sin(p)*cos(k);
 
 	R(2,1) = -cos(p)*sin(k);
-	R(2,2) = cos(w)*cos(k) - sin(w)*sin(p)*sin(k); %cos(w)*sin(p)*sin(k);
+	R(2,2) = cos(w)*cos(k) - sin(w)*sin(p)*sin(k);
 	R(2,3) = sin(w)*cos(k) + cos(w)*sin(p)*sin(k);
 
 	R(3,1) = sin(p);

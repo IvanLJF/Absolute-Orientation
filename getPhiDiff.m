@@ -1,7 +1,7 @@
 function drp = getPhiDiff(w, p, k)
 	%returns the matrix of differentials R w.r.t angle phi :
 	
-	% replacement elements elements used for shorter code:
+	% replacement elements ai,bi used for shorter code:
 
 	a1 = cos(w);
 	a2 = cos(p);

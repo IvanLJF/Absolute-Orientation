@@ -1,10 +1,7 @@
 function IP = getIP(xc, yc, zc, N, E, H)
   % initial parameters are then estimated as:
 
-  %rotations
-  w = 0; %omega, rotation in x-axis
-  p = 0; %phi, rotation in y-axis
-  
+  IP= zeros(7,1);
   %--------------------------------------%
   %formulated
   % between points a and b
@@ -27,29 +24,23 @@ function IP = getIP(xc, yc, zc, N, E, H)
     ground_dist = sqrt( diff_E^2 + diff_N^2 ); %in M
     
     %scale factor lm:
-    lm = ground_dist / (model_dist) 
+    lm = (ground_dist / model_dist);
+    IP(1,1) = lm;
   end
 
+  % assumed rotations
+  IP(2,1) = 0; %omega, w rotation in x-axis
+  IP(3,1) = 0; %phi, p rotation in y-axis
+  
   function k = getKappa()
     %bearings
     model_brg = atan(diff_x / diff_y);
     ground_brg = atan(diff_E / diff_N);
 
-    k = ground_brg - model_brg
+    k = ground_brg - model_brg; % kappa k, rotation in z
+    IP(4,1) = k;
     % kappa k degrees
-    kdeg = radtodeg(ground_brg - model_brg) %in degrees
-    
-    %some test conversions
-    % first = radtodeg(atan(diff_x / diff_y));
-
-    % if first < 0
-    %   % first + 180;
-    %   model_brg = degtorad(first + 180)
-    % else
-    %   model_brg = atan(diff_x / diff_y)
-    % end      
-
-
+    kdeg = radtodeg(IP(4,1)); %in degrees
   end
 
   function enh = getShifts(a, b)
@@ -63,45 +54,25 @@ function IP = getIP(xc, yc, zc, N, E, H)
     szc = zc * lm;
 
     % the three shifts for point a
-    e = E(a) - sxc(a);
-    n = N(a) - syc(a);
-    h = H(a) - szc(a);
-      
-    enh = [
-      e
-      n
-      h
-    ]
+    e1 = E(a) - sxc(a);
+    n1 = N(a) - syc(a);
+    h1 = H(a) - szc(a);
+    
+    e2 = E(b) - sxc(b);
+    n2 = N(b) - syc(b);
+    h2 = H(b) - szc(b);
+
+    e = (e1 + e2 )/2; %e, shift along the x-ax
+    n = (n1 + n2 )/2; %n, shift along the y-axis
+    h = (h1 + h2 )/2; %h, shift along the z-axis 
+
+    IP(5,1) = e;  %= (e1 + e2 )/2; %e, shift along the x-axis
+    IP(6,1) = n; %(n1 + n2 )/2; %n, shift along the y-axis
+    IP(7,1) = h; %(h1 + h2 )/2; %h, shift along the z-axis 
   end
 
-  lm = getScale();
-  k = getKappa();
-  
-  enh = getShifts(a,b);
-  e = enh(1);
-  n = enh(2);
-  h = enh(3);
- 
-  IP = [
-    lm
-    w
-    p
-    k
-    e
-    n
-    h
-  ];
-
-  % CHECKS %
-  % %rotation in z, kappa, k radians
-  % k1 = 1.590495551;
-
-  % %scale factor: lambda, lm
-  % lm1 = 695.696381
-
-  % %translations
-  % e1 = 670149.90;
-  % n1 = 222719.71;
-  % h1 = 1122.22;
+  getScale();
+  getKappa();
+  getShifts(a,b);
 
 end

@@ -71,15 +71,16 @@ H = [
 ];
 
 %matrix of initial parameters IP
-IP = getIP(xc, yc, zc, N, E, H)
+IP = getIP(xc, yc, zc, N, E, H);
 
+lm = IP(1,1); %quick access
 w = IP(2,1);
 p = IP(3,1);
 k = IP(4,1);
 
 
 %rotational matrix Rs
-R = getR(w, p, k);
+R = getR(w, p, k)';
 
 %differentials of rotational elements
 
@@ -132,11 +133,11 @@ for m = 1: iterations
 
   drk = getKappaDiff(w, p, k);
 
-  A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r)
+  A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r);
 
-  L = getL(IP, xc, yc, zc, E, N, H, R, r)
+  L = getL(IP, xc, yc, zc, E, N, H, R, r);
 
-  dx = getdx(A,L)
+  dx = getdx(A,L);
 
   if m == iterations
     ENH = getCoords(x, y, z, IP, R, r2)
