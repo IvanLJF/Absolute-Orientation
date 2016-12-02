@@ -1,7 +1,7 @@
-function A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r)
+function A = getA_control(IP, xc, yc, zc, R, drw, drp, drk, r)
   % returns the A matrix using the three control points
 
-  % from the initial parameter matrix IP::
+  % from the initial parameter matrix IP::  
   %scale factor, lambda, lm
   lm = IP(1,1);
   

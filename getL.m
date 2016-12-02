@@ -15,9 +15,9 @@ function L = getL(IP, xc, yc, zc, E, N, H, R, r)
 
 		a= m*3; %index navigations
 
-		L(a-2,1) = E(m,1) - lm * ( R(1,1)*xc(m,1) + R(1,2)*yc(m,1) + R(1,3)*zc(m,1) ) + e;		
-		L(a-1,1) = N(m,1) - lm * ( R(2,1)*xc(m,1) + R(2,2)*yc(m,1) + R(2,3)*zc(m,1) ) + n;			
-		L(a,1)   = H(m,1) - lm * ( R(3,1)*xc(m,1) + R(3,2)*yc(m,1) + R(3,3)*zc(m,1) ) + h;	
+		L(a-2,1) = E(m,1) - lm * ( R(1,1)*xc(m,1) + R(1,2)*yc(m,1) + R(1,3)*zc(m,1) ) - e;		
+		L(a-1,1) = N(m,1) - lm * ( R(2,1)*xc(m,1) + R(2,2)*yc(m,1) + R(2,3)*zc(m,1) ) - n;			
+		L(a,1)   = H(m,1) - lm * ( R(3,1)*xc(m,1) + R(3,2)*yc(m,1) + R(3,3)*zc(m,1) ) - h;	
 	
 	end
 end

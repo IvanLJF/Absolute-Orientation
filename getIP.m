@@ -62,9 +62,9 @@ function IP = getIP(xc, yc, zc, N, E, H)
     n2 = N(b) - syc(b);
     h2 = H(b) - szc(b);
 
-    e = (e1 + e2 )/2; %e, shift along the x-ax
-    n = (n1 + n2 )/2; %n, shift along the y-axis
-    h = (h1 + h2 )/2; %h, shift along the z-axis 
+    e = (e1 + e2 )/2 ; %e, shift along the x-ax
+    n = (n1 + n2 )/2 ; %n, shift along the y-axis
+    h = (h1 + h2 )/2 ; %h, shift along the z-axis 
 
     IP(5,1) = e;  %= (e1 + e2 )/2; %e, shift along the x-axis
     IP(6,1) = n; %(n1 + n2 )/2; %n, shift along the y-axis

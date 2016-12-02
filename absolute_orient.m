@@ -68,6 +68,7 @@ H = [
   1243.65
   1259.22
   1267.65
+  
 ];
 
 %matrix of initial parameters IP
@@ -97,26 +98,19 @@ r2 = length(x); % number of all the data points
 
 %first iteration values
 
-A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r);
+A = getA_control(IP, xc, yc, zc, R, drw, drp, drk, r);
 
 L = getL(IP, xc, yc, zc, E, N, H, R, r);
 
 dx = getdx(A,L);
 
+ENH = getCoords(x, y, z, IP, R, r2);
 
-% % residual matrix v
-% v = - L - (A * dx);
+deviations = getDeviations(A, L, dx);
 
-% sigma = sqrt(v' * v );
-
-% exx = sigma * inv(A' * A);
-
-% variances = diag(exx);
-
-% deviations = sqrt(variances);
 
 %%%%-------------------------------------%%%
-iterations = 1;
+iterations = 7;
 for m = 1: iterations
   % all shifts above equal to
   IP = IP+dx;
@@ -133,22 +127,22 @@ for m = 1: iterations
 
   drk = getKappaDiff(w, p, k);
 
-  A = getA_control(IP, xc, yc, zc, E, N, H, R, drw, drp, drk, r);
+  A = getA_control(IP, xc, yc, zc, R, drw, drp, drk, r);
 
   L = getL(IP, xc, yc, zc, E, N, H, R, r);
 
   dx = getdx(A,L);
 
+  % --------------------- accuracy check  ------------------------ %
+  
+  deviations = getDeviations(A, L, dx)
+  
+  m
+
   if m == iterations
+    format long
     ENH = getCoords(x, y, z, IP, R, r2)
   end
-
 end
 
-% fdx = zeros()
-% compute the values for the whole model iterating 10 times
-% for m = 1:10
-%   FA = getA_fullmodel(IP, x, y, z, E, N, H, R, drw, drp, drk, r2);
-%   FL = getL_fullmodel(IP, x, y, z, E, N, H, R, r2);
-%   fdx = getdx_fullmodel(FA, FL)
-% end
+

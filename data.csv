@@ -1,5 +1,5 @@
-model point coordinates (mm),,,
-point,x,y,z
+MODEL COORDINATES (mm),,,
+POINT,x,y,z
 11,210.47,896.96,174.54
 21,219.92,507.34,195.46
 31,229.82,206.32,217.02
@@ -8,8 +8,8 @@ point,x,y,z
 61,594.13,243.06,206.49
 ,,,
 ,,,
-Ground point coordinates -GCPs (m),,,
-point,N (Y),E (X),Z (H)
+GROUND POINT COORDINATES - GCPs (m),,,
+POINT,N (Y),E (X),Z (H)
 11,223343.72,670296.32,1243.65
 21,223345.03,670542.31,1259.22
 61,223619.54,670745.89,1267.65

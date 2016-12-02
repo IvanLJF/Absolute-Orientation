@@ -2,7 +2,7 @@ function ENH = getCoords(x, y, z, IP, R, r2)
 	% a computation of the ground coordinates of all the model points
 	ENH = zeros(r2,3); %where r2 is the number of model points
 
-	lm = IP(1,1) %lambda, scale value 
+	lm = IP(1,1); %lambda, scale value 
   e = IP(5,1);
   n = IP(6,1);
   h = IP(7,1);
