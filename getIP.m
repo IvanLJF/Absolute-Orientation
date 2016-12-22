@@ -40,7 +40,7 @@ function IP = getIP(xc, yc, zc, N, E, H)
     k = ground_brg - model_brg; % kappa k, rotation in z
     IP(4,1) = k;
     % kappa k degrees
-    kdeg = radtodeg(IP(4,1)); %in degrees
+    kdeg = radtodeg(IP(4,1)) %in degrees
   end
 
   function enh = getShifts(a, b)
